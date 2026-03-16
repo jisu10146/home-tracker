@@ -118,7 +118,7 @@ jobs:
               "elements": [{
                   "type": "button",
                   "text": {"type": "plain_text", "text": "🏠 홈 트래커 열기", "emoji": True},
-                  "url": "https://YOUR_GITHUB_ID.github.io/home-tracker",
+                  "url": "https://jisu10146.github.io/home-tracker",
                   "style": "primary"
               }]
           })
