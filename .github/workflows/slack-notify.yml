@@ -14,9 +14,7 @@ jobs:
     steps:
       - name: 저장소 체크아웃
         uses: actions/checkout@v4
-
       - name: 집안일 데이터 읽고 슬랙 전송
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         run: python3 notify.py
-
