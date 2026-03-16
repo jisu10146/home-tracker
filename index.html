@@ -166,6 +166,41 @@ body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-seri
 .dp-cancel { font-size: 12px; padding: 5px 12px; border: 0.5px solid var(--border); border-radius: 6px; background: none; cursor: pointer; color: var(--text-secondary); }
 .dp-save { font-size: 12px; padding: 5px 12px; border: none; border-radius: 6px; background: var(--text); color: var(--bg); cursor: pointer; }
 
+/* Settings */
+.gear-btn { background:none; border:0.5px solid var(--border); border-radius:7px; padding:5px 8px; cursor:pointer; color:var(--text-secondary); font-size:14px; transition:background 0.1s; }
+.gear-btn:hover { background:var(--bg-secondary); }
+.settings-section { margin-bottom:18px; }
+.settings-section-title { font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:10px; }
+.webhook-status { display:flex; align-items:center; gap:6px; font-size:12px; margin-top:8px; }
+.webhook-dot { width:7px; height:7px; border-radius:50%; }
+.webhook-dot.set { background:var(--green); }
+.webhook-dot.unset { background:var(--text-tertiary); }
+.webhook-hint { font-size:11px; color:var(--text-tertiary); margin-top:6px; line-height:1.6; }
+.settings-divider { height:0.5px; background:var(--border); margin:16px 0; }
+.time-row { display:flex; align-items:center; gap:10px; }
+.time-row input[type=time] { font-size:13px; border:0.5px solid var(--border-md); border-radius:6px; padding:6px 10px; background:var(--bg); color:var(--text); outline:none; font-family:inherit; }
+.time-row input[type=time]:focus { border-color:var(--blue); }
+.toggle-row { display:flex; align-items:center; justify-content:space-between; }
+.toggle-label { font-size:13px; }
+.toggle { position:relative; width:36px; height:20px; }
+.toggle input { opacity:0; width:0; height:0; }
+.toggle-slider { position:absolute; inset:0; background:var(--border-md); border-radius:20px; cursor:pointer; transition:background 0.2s; }
+.toggle-slider:before { content:''; position:absolute; width:14px; height:14px; left:3px; top:3px; background:#fff; border-radius:50%; transition:transform 0.2s; }
+.toggle input:checked + .toggle-slider { background:var(--green); }
+.toggle input:checked + .toggle-slider:before { transform:translateX(16px); }
+.btn-danger { font-size:12px; padding:6px 14px; border:0.5px solid var(--red-bg); border-radius:6px; background:none; cursor:pointer; color:var(--red-text); transition:background 0.1s; }
+.btn-danger:hover { background:var(--red-bg); }
+
+/* Slack */
+.slack-btn { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:#fff; background:#4A154B; border:none; border-radius:7px; padding:5px 12px; cursor:pointer; transition:opacity 0.15s; }
+.slack-btn:hover { opacity:0.85; }
+.slack-btn:disabled { opacity:0.5; cursor:default; }
+.slack-toast { position:fixed; bottom:24px; right:24px; background:var(--text); color:var(--bg); font-size:12px; padding:10px 16px; border-radius:8px; opacity:0; pointer-events:none; transition:opacity 0.3s; z-index:500; max-width:280px; line-height:1.5; }
+.slack-toast.show { opacity:1; }
+.auto-badge { display:inline-flex; align-items:center; gap:4px; font-size:10px; background:var(--green-bg); color:var(--green-text); border-radius:20px; padding:2px 8px; margin-left:6px; }
+.auto-badge-dot { width:5px; height:5px; border-radius:50%; background:var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
 /* Modal */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 200; align-items: center; justify-content: center; }
 .modal-overlay.open { display: flex; }
@@ -191,6 +226,11 @@ body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-seri
         <button class="view-btn active" id="btn-list" onclick="switchView('list')">목록</button>
         <button class="view-btn" id="btn-cal"  onclick="switchView('calendar')">달력</button>
       </div>
+      <button class="slack-btn" id="slack-btn" onclick="sendToSlack(false)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zm1.271 0a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zm0 1.271a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zm10.122 2.521a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zm-1.268 0a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zm-2.523 10.122a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zm0-1.268a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>
+        슬랙 전송
+      </button>
+      <button class="gear-btn" onclick="openSettings()" title="설정">⚙️</button>
       <div class="date-pill" id="today-date"></div>
     </div>
   </div>
@@ -276,6 +316,86 @@ body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-seri
   </div>
 </div>
 
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settings-modal" onclick="closeSettingsIfOutside(event)">
+  <div class="modal" style="width:400px">
+    <h3>설정</h3>
+
+    <div class="settings-section">
+      <div class="settings-section-title">슬랙 연동</div>
+      <div class="field">
+        <label>Webhook URL</label>
+        <input id="s-webhook" type="password" placeholder="https://hooks.slack.com/services/..." />
+      </div>
+      <div class="webhook-status">
+        <div class="webhook-dot" id="webhook-dot"></div>
+        <span id="webhook-status-text" style="font-size:12px;color:var(--text-secondary)"></span>
+      </div>
+      <div class="webhook-hint">
+        슬랙 앱 설정에서 발급한 Incoming Webhook URL을 입력하세요.<br>
+        이 값은 이 브라우저에만 저장되며 GitHub 코드에 절대 포함되지 않아요.
+      </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <div class="settings-section">
+      <div class="settings-section-title">자동 전송</div>
+      <div class="toggle-row" style="margin-bottom:12px">
+        <span class="toggle-label">매일 자동 전송</span>
+        <label class="toggle">
+          <input type="checkbox" id="s-auto" onchange="saveSettings()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="time-row">
+        <span style="font-size:13px;color:var(--text-secondary)">전송 시각</span>
+        <input type="time" id="s-time" value="08:00" onchange="saveSettings()" />
+      </div>
+      <div class="webhook-hint" style="margin-top:8px">자동 전송은 이 앱이 브라우저에 열려 있을 때만 작동해요.</div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <div class="settings-section">
+      <div class="settings-section-title">GitHub 데이터 동기화</div>
+      <div class="field">
+        <label>GitHub 사용자명</label>
+        <input id="s-gh-user" placeholder="예: myusername" />
+      </div>
+      <div class="field">
+        <label>저장소 이름</label>
+        <input id="s-gh-repo" placeholder="예: home-tracker" />
+      </div>
+      <div class="field">
+        <label>Personal Access Token</label>
+        <input id="s-gh-token" type="password" placeholder="ghp_xxxxxxxxxxxx" />
+      </div>
+      <div class="webhook-hint">
+        설정하면 집안일을 추가·수정·완료할 때마다 GitHub에 자동 저장돼요.<br>
+        GitHub Actions가 이 데이터를 읽어 슬랙으로 상세 알림을 보내줘요.<br>
+        토큰은 이 브라우저에만 저장되며 코드에 포함되지 않아요.
+      </div>
+      <div class="webhook-status" style="margin-top:8px">
+        <div class="webhook-dot" id="gh-dot"></div>
+        <span id="gh-status-text" style="font-size:12px;color:var(--text-secondary)"></span>
+      </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <div class="settings-section">
+      <div class="settings-section-title">데이터</div>
+      <button class="btn-danger" onclick="resetData()">모든 데이터 초기화</button>
+    </div>
+
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeSettings()">취소</button>
+      <button class="btn-save" onclick="saveSettingsAndClose()">저장</button>
+    </div>
+  </div>
+</div>
+
 <!-- Add Modal -->
 <div class="modal-overlay" id="modal" onclick="closeIfOutside(event)">
   <div class="modal">
@@ -338,6 +458,7 @@ function load() {
 }
 function save() {
   try { localStorage.setItem(STORAGE_KEY,JSON.stringify({chores,nextId})); } catch(e){}
+  syncToGitHub(); // GitHub에도 동기화
 }
 
 function getDays(c) {
@@ -632,6 +753,291 @@ function addSuggest(name,cat){
 
 load();
 renderSuggestions();
+
+const GH_USER_KEY  = 'home_tracker_gh_user';
+const GH_REPO_KEY  = 'home_tracker_gh_repo';
+const GH_TOKEN_KEY = 'home_tracker_gh_token';
+
+function getGHConfig() {
+  return {
+    user:  localStorage.getItem(GH_USER_KEY)  || '',
+    repo:  localStorage.getItem(GH_REPO_KEY)  || '',
+    token: localStorage.getItem(GH_TOKEN_KEY) || ''
+  };
+}
+
+function updateGHStatus() {
+  const g = getGHConfig();
+  const has = !!(g.user && g.repo && g.token);
+  const dot  = document.getElementById('gh-dot');
+  const text = document.getElementById('gh-status-text');
+  if (!dot) return;
+  dot.className  = 'webhook-dot ' + (has ? 'set' : 'unset');
+  text.textContent = has
+    ? `연결됨 — ${g.user}/${g.repo} 에 자동 저장돼요`
+    : '미설정 — 입력하면 GitHub에 데이터가 자동 동기화돼요';
+}
+
+/* GitHub API로 data.json 저장 */
+async function syncToGitHub() {
+  const g = getGHConfig();
+  if (!g.user || !g.repo || !g.token) return; // 설정 없으면 스킵
+
+  const content = btoa(unescape(encodeURIComponent(
+    JSON.stringify({ chores, nextId, updatedAt: new Date().toISOString() }, null, 2)
+  )));
+
+  try {
+    // 현재 파일 SHA 조회 (업데이트 시 필요)
+    let sha = '';
+    const getRes = await fetch(
+      `https://api.github.com/repos/${g.user}/${g.repo}/contents/data.json`,
+      { headers: { Authorization: `token ${g.token}`, Accept: 'application/vnd.github.v3+json' } }
+    );
+    if (getRes.ok) { const d = await getRes.json(); sha = d.sha; }
+
+    // 파일 저장
+    await fetch(
+      `https://api.github.com/repos/${g.user}/${g.repo}/contents/data.json`,
+      {
+        method: 'PUT',
+        headers: { Authorization: `token ${g.token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: `데이터 업데이트 ${new Date().toLocaleDateString('ko-KR')}`,
+          content,
+          ...(sha ? { sha } : {})
+        })
+      }
+    );
+  } catch(e) { console.warn('GitHub 동기화 실패:', e); }
+}
+
+/* ── SETTINGS ── */
+const SETTINGS_KEY = 'home_tracker_settings';
+const SLACK_BTN_SVG = `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zm1.271 0a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zm0 1.271a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zm10.122 2.521a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zm-1.268 0a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zm-2.523 10.122a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zm0-1.268a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>`;
+const SLACK_BTN_HTML = SLACK_BTN_SVG + ' 슬랙 전송';
+
+function getSettings() {
+  try { return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch(e) { return {}; }
+}
+
+function openSettings() {
+  const url = getWebhookUrl();
+  const s = getSettings();
+  const g = getGHConfig();
+  document.getElementById('s-webhook').value = url ? '●●●●●●●●●●●●●●●●●●●●' : '';
+  document.getElementById('s-webhook').dataset.hasValue = url ? '1' : '0';
+  document.getElementById('s-auto').checked = !!s.autoSend;
+  document.getElementById('s-time').value = s.sendTime || '08:00';
+  document.getElementById('s-gh-user').value  = g.user;
+  document.getElementById('s-gh-repo').value  = g.repo;
+  document.getElementById('s-gh-token').value = g.token ? '●●●●●●●●●●●●●●●●●●●●' : '';
+  document.getElementById('s-gh-token').dataset.hasValue = g.token ? '1' : '0';
+  updateWebhookStatus();
+  updateGHStatus();
+  document.getElementById('settings-modal').classList.add('open');
+}
+
+function closeSettings() {
+  document.getElementById('settings-modal').classList.remove('open');
+}
+function closeSettingsIfOutside(e) {
+  if (e.target.id === 'settings-modal') closeSettings();
+}
+
+function updateWebhookStatus() {
+  const has = !!getWebhookUrl();
+  const dot  = document.getElementById('webhook-dot');
+  const text = document.getElementById('webhook-status-text');
+  dot.className  = 'webhook-dot ' + (has ? 'set' : 'unset');
+  text.textContent = has ? '연결됨 — Webhook URL이 저장되어 있어요' : '미설정 — URL을 입력하면 슬랙 전송이 가능해요';
+}
+
+function saveSettings() {
+  const s = getSettings();
+  s.autoSend = document.getElementById('s-auto').checked;
+  s.sendTime = document.getElementById('s-time').value;
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+}
+
+function saveSettingsAndClose() {
+  // Slack Webhook
+  const webhookInput = document.getElementById('s-webhook');
+  const webhookVal = webhookInput.value.trim();
+  if (webhookVal && !webhookVal.startsWith('●')) {
+    if (!webhookVal.startsWith('https://hooks.slack.com/')) {
+      showToast('⚠️ 올바른 Slack Webhook URL 형식이 아니에요.'); return;
+    }
+    localStorage.setItem(SLACK_WEBHOOK_KEY, webhookVal);
+  }
+
+  // GitHub 설정
+  const user  = document.getElementById('s-gh-user').value.trim();
+  const repo  = document.getElementById('s-gh-repo').value.trim();
+  const tokenInput = document.getElementById('s-gh-token');
+  const tokenVal = tokenInput.value.trim();
+  if (user)  localStorage.setItem(GH_USER_KEY, user);
+  if (repo)  localStorage.setItem(GH_REPO_KEY, repo);
+  if (tokenVal && !tokenVal.startsWith('●')) localStorage.setItem(GH_TOKEN_KEY, tokenVal);
+
+  saveSettings();
+  closeSettings();
+  updateWebhookStatus();
+  updateGHStatus();
+  showToast('✅ 설정이 저장됐어요.');
+
+  // GitHub 설정이 됐으면 즉시 동기화 테스트
+  const g = getGHConfig();
+  if (g.user && g.repo && g.token) syncToGitHub();
+}
+
+function resetData() {
+  if (!confirm('모든 집안일 데이터가 삭제돼요. 계속할까요?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  chores = defaults.map(c=>({...c}));
+  nextId = 100;
+  save(); render();
+  closeSettings();
+  showToast('데이터가 초기화됐어요.');
+}
+
+// webhook 입력창 포커스 시 마스킹 해제
+document.addEventListener('DOMContentLoaded', () => {
+  const inp = document.getElementById('s-webhook');
+  if (inp) {
+    inp.addEventListener('focus', () => {
+      if (inp.dataset.hasValue === '1') inp.value = '';
+    });
+  }
+  const tok = document.getElementById('s-gh-token');
+  if (tok) {
+    tok.addEventListener('focus', () => {
+      if (tok.dataset.hasValue === '1') tok.value = '';
+    });
+  }
+});
+
+/* ── SLACK ── */
+const SLACK_WEBHOOK_KEY = 'home_tracker_slack_webhook';
+const SLACK_SENT_KEY    = 'home_tracker_slack_sent';
+function getWebhookUrl(){ return localStorage.getItem(SLACK_WEBHOOK_KEY)||''; }
+
+function showToast(msg, duration=3500) {
+  const t = document.getElementById('slack-toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), duration);
+}
+
+function buildSlackMessage() {
+  const dateLabel = today.toLocaleDateString('ko-KR',{month:'long',day:'numeric',weekday:'short'});
+  const late  = chores.filter(c=>!c.doneThisSession && getStatus(getDays(c))==='late');
+  const soon  = chores.filter(c=>!c.doneThisSession && getStatus(getDays(c))==='soon');
+  const ok7   = chores.filter(c=>!c.doneThisSession && getDays(c)>3 && getDays(c)<=7);
+  const done  = chores.filter(c=>c.doneThisSession);
+
+  // 주간 예정 (다음 7일)
+  const nextWeek = chores.filter(c=>{
+    const d=getDays(c); return !c.doneThisSession && d>3 && d<=7;
+  });
+  // 월간 예정 (8~30일)
+  const nextMonth = chores.filter(c=>{
+    const d=getDays(c); return !c.doneThisSession && d>7 && d<=30;
+  });
+
+  let blocks = [
+    {
+      type: 'header',
+      text: { type: 'plain_text', text: `🏠 오늘의 집안일 — ${dateLabel}`, emoji: true }
+    }
+  ];
+
+  if (late.length) {
+    blocks.push({ type:'section', text:{ type:'mrkdwn',
+      text: `*🔴 기한 지남 (${late.length}개)*\n` + late.map(c=>`• ${c.name} — ${Math.abs(getDays(c))}일 지남`).join('\n')
+    }});
+  }
+
+  if (soon.length) {
+    blocks.push({ type:'section', text:{ type:'mrkdwn',
+      text: `*🟡 오늘·내일 할 일 (${soon.length}개)*\n` + soon.map(c=>`• ${c.name} — ${dueLabel(getDays(c))}`).join('\n')
+    }});
+  }
+
+  if (!late.length && !soon.length) {
+    blocks.push({ type:'section', text:{ type:'mrkdwn', text:'*✅ 오늘 급한 집안일이 없어요!*' }});
+  }
+
+  if (nextWeek.length) {
+    blocks.push({ type:'section', text:{ type:'mrkdwn',
+      text: `*📅 이번 주 예정 (${nextWeek.length}개)*\n` + nextWeek.map(c=>`• ${c.name} — ${dueLabel(getDays(c))}`).join('\n')
+    }});
+  }
+
+  if (nextMonth.length) {
+    blocks.push({ type:'section', text:{ type:'mrkdwn',
+      text: `*📆 이번 달 예정 (${nextMonth.length}개)*\n` + nextMonth.map(c=>`• ${c.name} — ${dueLabel(getDays(c))}`).join('\n')
+    }});
+  }
+
+  if (done.length) {
+    blocks.push({ type:'section', text:{ type:'mrkdwn',
+      text: `*✅ 오늘 완료 (${done.length}개)*\n` + done.map(c=>`• ${c.name}`).join('\n')
+    }});
+  }
+
+  blocks.push({ type:'divider' });
+  blocks.push({ type:'context', elements:[{ type:'mrkdwn', text:`총 ${chores.length}개 항목 · 완료율 ${chores.length?Math.round(done.length/chores.length*100):0}%` }]});
+
+  return { blocks };
+}
+
+async function sendToSlack(isAuto=false) {
+  const url = getWebhookUrl();
+  if (!url) { openSettings(); showToast('먼저 슬랙 Webhook URL을 설정해주세요.'); return; }
+  const btn = document.getElementById('slack-btn');
+  btn.disabled = true; btn.textContent = '전송 중...';
+  try {
+    const payload = buildSlackMessage();
+    await fetch(url, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (isAuto) {
+      localStorage.setItem(SLACK_SENT_KEY, todayStr);
+      showToast('🔔 오전 8시 자동 알림이 슬랙으로 전송됐어요!');
+    } else {
+      showToast('✅ 슬랙으로 전송했어요!');
+    }
+  } catch(e) {
+    showToast('⚠️ 전송 실패. 네트워크나 URL을 확인해주세요.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = SLACK_BTN_HTML;
+  }
+}
+
+/* 자동 전송 스케줄러 */
+function scheduleAutoSlack() {
+  function check() {
+    const s = getSettings();
+    if (!s.autoSend) return;
+    const [th, tm] = (s.sendTime || '08:00').split(':').map(Number);
+    const now = new Date();
+    const lastSent = localStorage.getItem(SLACK_SENT_KEY);
+    if (now.getHours()===th && now.getMinutes()===tm && lastSent!==todayStr) {
+      sendToSlack(true);
+    }
+  }
+  check();
+  setInterval(check, 60000);
+}
+scheduleAutoSlack();
+
+// 토스트 div
+const toastEl = document.createElement('div');
+toastEl.id = 'slack-toast'; toastEl.className = 'slack-toast';
+document.body.appendChild(toastEl);
 </script>
 </body>
 </html>
