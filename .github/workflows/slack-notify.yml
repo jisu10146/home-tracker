@@ -1,0 +1,52 @@
+name: 집안일 슬랙 알림
+
+on:
+  schedule:
+    - cron: '0 23 * * *'  # 한국 시간 오전 8시 (UTC 23시)
+  workflow_dispatch:       # 수동 실행 버튼도 생김
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 집안일 알림 슬랙 전송
+        run: |
+          TODAY=$(TZ="Asia/Seoul" date "+%m월 %d일")
+          WEEKDAY=$(TZ="Asia/Seoul" date "+%A" | sed 's/Monday/월요일/;s/Tuesday/화요일/;s/Wednesday/수요일/;s/Thursday/목요일/;s/Friday/금요일/;s/Saturday/토요일/;s/Sunday/일요일/')
+          
+          curl -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+          -H 'Content-type: application/json' \
+          --data "{
+            \"blocks\": [
+              {
+                \"type\": \"header\",
+                \"text\": {
+                  \"type\": \"plain_text\",
+                  \"text\": \"🏠 오늘의 집안일 — ${TODAY} (${WEEKDAY})\",
+                  \"emoji\": true
+                }
+              },
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"트래커에서 오늘 할 일을 확인하고 완료 체크해주세요 ✅\"
+                }
+              },
+              {
+                \"type\": \"actions\",
+                \"elements\": [
+                  {
+                    \"type\": \"button\",
+                    \"text\": {
+                      \"type\": \"plain_text\",
+                      \"text\": \"홈 트래커 열기\",
+                      \"emoji\": true
+                    },
+                    \"url\": \"https://jisu10146.github.io/home-tracker\",
+                    \"style\": \"primary\"
+                  }
+                ]
+              }
+            ]
+          }"
