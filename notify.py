@@ -1,0 +1,82 @@
+import json, os, urllib.request, datetime
+
+webhook = os.environ['SLACK_WEBHOOK']
+
+with open('data.json', 'r', encoding='utf-8') as f:
+    data = json.load(f)
+
+chores = data.get('chores', [])
+tz_kst = datetime.timezone(datetime.timedelta(hours=9))
+now_kst = datetime.datetime.now(tz_kst)
+today = now_kst.date()
+
+def days_until(c):
+    try:
+        last = datetime.date.fromisoformat(c['lastDone'])
+        due = last + datetime.timedelta(days=int(c['cycle']))
+        return (due - today).days
+    except:
+        return 999
+
+def due_label(d):
+    if d < 0: return f'{abs(d)}일 지남'
+    if d == 0: return '오늘'
+    if d == 1: return '내일'
+    target = today + datetime.timedelta(days=d)
+    weekdays_ko = ['월요일','화요일','수요일','목요일','금요일','토요일','일요일']
+    return f'{d}일 후 ({target.month}월 {target.day}일 {weekdays_ko[target.weekday()]})'
+
+late       = [c for c in chores if not c.get('doneThisSession') and days_until(c) < 0]
+today_soon = [c for c in chores if not c.get('doneThisSession') and 0 <= days_until(c) <= 3]
+this_week  = [c for c in chores if not c.get('doneThisSession') and 4 <= days_until(c) <= 7]
+done       = [c for c in chores if c.get('doneThisSession')]
+
+date_label = now_kst.strftime('%-m월 %-d일')
+weekdays   = ['월요일','화요일','수요일','목요일','금요일','토요일','일요일']
+day_ko     = weekdays[now_kst.weekday()]
+total      = len(chores)
+done_rate  = round(len(done) / total * 100) if total else 0
+
+blocks = [
+    {'type': 'header', 'text': {'type': 'plain_text', 'text': f'🏠 오늘의 집안일 — {date_label} ({day_ko})', 'emoji': True}}
+]
+
+if late:
+    text = f'*🔴 기한 지남 ({len(late)}개)*\n'
+    text += '\n'.join(f'• {c["name"]} — {due_label(days_until(c))}' for c in late)
+    blocks.append({'type': 'section', 'text': {'type': 'mrkdwn', 'text': text}})
+
+if today_soon:
+    text = f'*🟡 오늘·내일 할 일 ({len(today_soon)}개)*\n'
+    text += '\n'.join(f'• {c["name"]} — {due_label(days_until(c))}' for c in today_soon)
+    blocks.append({'type': 'section', 'text': {'type': 'mrkdwn', 'text': text}})
+
+if not late and not today_soon:
+    blocks.append({'type': 'section', 'text': {'type': 'mrkdwn', 'text': '*✅ 오늘 급한 집안일이 없어요!*'}})
+
+if this_week:
+    text = f'*📅 이번 주 예정 ({len(this_week)}개)*\n'
+    text += '\n'.join(f'• {c["name"]} — {due_label(days_until(c))}' for c in this_week)
+    blocks.append({'type': 'section', 'text': {'type': 'mrkdwn', 'text': text}})
+
+if done:
+    text = f'*✅ 완료됨 ({len(done)}개)*\n'
+    text += '\n'.join(f'• {c["name"]}' for c in done)
+    blocks.append({'type': 'section', 'text': {'type': 'mrkdwn', 'text': text}})
+
+blocks.append({'type': 'divider'})
+blocks.append({'type': 'context', 'elements': [{'type': 'mrkdwn', 'text': f'총 {total}개 항목 · 완료율 {done_rate}%'}]})
+blocks.append({
+    'type': 'actions',
+    'elements': [{
+        'type': 'button',
+        'text': {'type': 'plain_text', 'text': '🏠 홈 트래커 열기', 'emoji': True},
+        'url': 'https://jisu10146.github.io/home-tracker',
+        'style': 'primary'
+    }]
+})
+
+payload = json.dumps({'blocks': blocks}).encode('utf-8')
+req = urllib.request.Request(webhook, data=payload, headers={'Content-Type': 'application/json'})
+urllib.request.urlopen(req)
+print('슬랙 전송 완료!')
