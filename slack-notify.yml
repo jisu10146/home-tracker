@@ -53,14 +53,16 @@ jobs:
           late       = [c for c in chores if not c.get('doneThisSession') and days_until(c) < 0]
           today_soon = [c for c in chores if not c.get('doneThisSession') and 0 <= days_until(c) <= 3]
           this_week  = [c for c in chores if not c.get('doneThisSession') and 4 <= days_until(c) <= 7]
-          this_month = [c for c in chores if not c.get('doneThisSession') and 8 <= days_until(c) <= 30]
           done       = [c for c in chores if c.get('doneThisSession')]
 
           def due_label(d):
               if d < 0:  return f"{abs(d)}일 지남"
               if d == 0: return "오늘"
               if d == 1: return "내일"
-              return f"{d}일 후"
+              target = today + datetime.timedelta(days=d)
+              weekdays_ko = ["월요일","화요일","수요일","목요일","금요일","토요일","일요일"]
+              day_name = weekdays_ko[target.weekday()]
+              return f"{d}일 후 ({target.month}월 {target.day}일 {day_name})"
 
           tz_kst = datetime.timezone(datetime.timedelta(hours=9))
           now_kst = datetime.datetime.now(tz_kst)
@@ -110,6 +112,15 @@ jobs:
           blocks.append({
               "type": "context",
               "elements": [{"type": "mrkdwn", "text": f"총 {total}개 항목 · 완료율 {done_rate}%"}]
+          })
+          blocks.append({
+              "type": "actions",
+              "elements": [{
+                  "type": "button",
+                  "text": {"type": "plain_text", "text": "🏠 홈 트래커 열기", "emoji": True},
+                  "url": "https://YOUR_GITHUB_ID.github.io/home-tracker",
+                  "style": "primary"
+              }]
           })
 
           payload = json.dumps({"blocks": blocks}).encode('utf-8')
