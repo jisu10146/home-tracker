@@ -1,0 +1,105 @@
+{
+  "chores": [
+    {
+      "id": 2,
+      "name": "화장실 청소",
+      "cat": "욕실",
+      "cycle": 14,
+      "lastDone": "2026-03-08",
+      "doneCount": 2,
+      "doneThisSession": false
+    },
+    {
+      "id": 5,
+      "name": "주방 기름때 제거",
+      "cat": "주방",
+      "cycle": 21,
+      "lastDone": "2026-02-28",
+      "doneCount": 1,
+      "doneThisSession": false
+    },
+    {
+      "id": 7,
+      "name": "세탁기 청소",
+      "cat": "세탁",
+      "cycle": 30,
+      "lastDone": "2026-03-07",
+      "doneCount": 1,
+      "doneThisSession": false
+    },
+    {
+      "id": 100,
+      "name": "이불 빨래",
+      "cat": "세탁",
+      "cycle": 30,
+      "lastDone": "2026-03-07",
+      "doneCount": 0,
+      "doneThisSession": false
+    },
+    {
+      "id": 101,
+      "name": "가습기 청소",
+      "cat": "청소",
+      "cycle": 7,
+      "lastDone": "2026-03-14",
+      "doneCount": 0,
+      "doneThisSession": false
+    },
+    {
+      "id": 102,
+      "name": "먼지 털이",
+      "cat": "청소",
+      "cycle": 14,
+      "lastDone": "2026-03-14",
+      "doneCount": 0,
+      "doneThisSession": false
+    },
+    {
+      "id": 103,
+      "name": "세탁기-건조기",
+      "cat": "청소",
+      "cycle": 7,
+      "lastDone": "2026-03-14",
+      "doneCount": 0,
+      "doneThisSession": false
+    },
+    {
+      "id": 104,
+      "name": "현관 청소",
+      "cat": "청소",
+      "cycle": 30,
+      "lastDone": "2026-02-28",
+      "doneCount": 0,
+      "doneThisSession": false
+    },
+    {
+      "id": 105,
+      "name": "베란다 청소",
+      "cat": "청소",
+      "cycle": 30,
+      "lastDone": "2026-02-28",
+      "doneCount": 0,
+      "doneThisSession": false
+    },
+    {
+      "id": 106,
+      "name": "재활용 버리기",
+      "cat": "관리",
+      "cycle": 7,
+      "lastDone": "2026-03-10",
+      "doneCount": 0,
+      "doneThisSession": false
+    },
+    {
+      "id": 107,
+      "name": "멀티쿠커 청소",
+      "cat": "청소",
+      "cycle": 30,
+      "lastDone": "2026-03-07",
+      "doneCount": 0,
+      "doneThisSession": false
+    }
+  ],
+  "nextId": 108,
+  "updatedAt": "2026-03-16T11:43:53.482Z"
+}
