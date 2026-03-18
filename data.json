@@ -86,7 +86,7 @@
       "name": "재활용 버리기",
       "cat": "관리",
       "cycle": 7,
-      "lastDone": "2026-03-10",
+      "lastDone": "2026-03-17",
       "doneCount": 0,
       "doneThisSession": false
     },
@@ -101,5 +101,5 @@
     }
   ],
   "nextId": 108,
-  "updatedAt": "2026-03-16T11:53:55.325Z"
+  "updatedAt": "2026-03-18T10:09:17.585Z"
 }
